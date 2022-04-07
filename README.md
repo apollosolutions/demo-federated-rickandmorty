@@ -1,36 +1,26 @@
-# solutions-server-template
-A repo template for creating a small demo with Apollo Gateway and local GraphQL subgraphs.
+# Non-Federation Transformation Example
 
-The Solutions team can use this as the template option when creating a new repo through the GitHub UI to demo some features with Apollo Gateway.
-
-This template uses the following packages:
-* @apollo/gateway
-* apollo-server
-* graphql
-* nodemon (dev dependency)
-
-START TEMAPLATE
--------
-
-# NAME-OF-PROJECT
+Example of how to transform a non-federation schema SDL and run it against a federation gateway even though it doesn't support it under the hood.
 
 **The code in this repository is experimental and has been provided for reference purposes only. Community feedback is welcome but this project may not be supported in the same way that repositories in the official [Apollo GraphQL GitHub organization](https://github.com/apollographql) are. If you need help you can file an issue on this repository, [contact Apollo](https://www.apollographql.com/contact-sales) to talk to an expert, or create a ticket directly in Apollo Studio.**
 
 ## Installation
 
-Outline the steps required to install project dependencies
+```
+npm i
+
+```
 
 ## Usage
 
-Provide detailed usage instructions here.
+First generate the new Authors schema
 
-## Known Limitations
+```
+npm run transform-schema
+```
 
-List any limitations of the project here:
+Then start the servers
 
-- Limitation 1
-- Limitation 2
-
-## Notes
-
-Is there anything else the user should know about this project? (e.g. assumptions, prior art, references, etc.)
+```
+npm start
+```
