@@ -1,5 +1,5 @@
 {
-  "name": "solutions-gateway-template",
+  "name": "non-federation-subgraph-transformation",
   "version": "1.0.0",
   "main": "index.js",
   "private": true,
