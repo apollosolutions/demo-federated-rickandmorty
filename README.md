@@ -8,19 +8,14 @@ Example of how to transform a non-federation schema SDL and run it against a fed
 
 ```
 npm i
-
 ```
 
 ## Usage
 
-First generate the new Authors schema
-
-```
-npm run transform-schema
-```
-
-Then start the servers
+Then start the servers and gateway with the current schemas. 
 
 ```
 npm start
 ```
+
+To regenerate the files, see the various directories for more info

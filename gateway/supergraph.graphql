@@ -1,0 +1,245 @@
+schema
+  @core(feature: "https://specs.apollo.dev/core/v0.2"),
+  @core(feature: "https://specs.apollo.dev/join/v0.1", for: EXECUTION)
+{
+  query: Query
+}
+
+directive @core(as: String, feature: String!, for: core__Purpose) repeatable on SCHEMA
+
+directive @join__field(graph: join__Graph, provides: join__FieldSet, requires: join__FieldSet) on FIELD_DEFINITION
+
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+
+directive @join__owner(graph: join__Graph!) on INTERFACE | OBJECT
+
+directive @join__type(graph: join__Graph!, key: join__FieldSet) repeatable on INTERFACE | OBJECT
+
+""""""
+enum CacheControlScope {
+  """"""
+  PRIVATE
+
+  """"""
+  PUBLIC
+}
+
+""""""
+type Character
+  @join__owner(graph: RICKANDMORTY)
+  @join__type(graph: RICKANDMORTY, key: "id")
+  @join__type(graph: EXTENSION, key: "id")
+{
+  """Time at which the character was created in the database."""
+  created: String @join__field(graph: RICKANDMORTY)
+
+  """Episodes in which this character appeared."""
+  episode: [Episode]! @join__field(graph: RICKANDMORTY)
+
+  """
+  The gender of the character ('Female', 'Male', 'Genderless' or 'unknown').
+  """
+  gender: String @join__field(graph: RICKANDMORTY)
+
+  """The id of the character."""
+  id: ID @join__field(graph: RICKANDMORTY)
+
+  """
+  Link to the character's image.
+  All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+  """
+  image: String @join__field(graph: RICKANDMORTY)
+
+  """The character's last known location"""
+  location: Location @join__field(graph: RICKANDMORTY)
+
+  """The name of the character."""
+  name: String @join__field(graph: RICKANDMORTY)
+  nickname: String @join__field(graph: EXTENSION)
+
+  """The character's origin location"""
+  origin: Location @join__field(graph: RICKANDMORTY)
+
+  """The species of the character."""
+  species: String @join__field(graph: RICKANDMORTY)
+
+  """The status of the character ('Alive', 'Dead' or 'unknown')."""
+  status: String @join__field(graph: RICKANDMORTY)
+
+  """The type or subspecies of the character."""
+  type: String @join__field(graph: RICKANDMORTY)
+}
+
+""""""
+type Characters {
+  """"""
+  info: Info
+
+  """"""
+  results: [Character]
+}
+
+""""""
+type Episode {
+  """The air date of the episode."""
+  air_date: String
+
+  """List of characters who have been seen in the episode."""
+  characters: [Character]!
+
+  """Time at which the episode was created in the database."""
+  created: String
+
+  """The code of the episode."""
+  episode: String
+
+  """The id of the episode."""
+  id: ID
+
+  """The name of the episode."""
+  name: String
+}
+
+""""""
+type Episodes {
+  """"""
+  info: Info
+
+  """"""
+  results: [Episode]
+}
+
+""""""
+input FilterCharacter {
+  """"""
+  gender: String
+
+  """"""
+  name: String
+
+  """"""
+  species: String
+
+  """"""
+  status: String
+
+  """"""
+  type: String
+}
+
+""""""
+input FilterEpisode {
+  """"""
+  episode: String
+
+  """"""
+  name: String
+}
+
+""""""
+input FilterLocation {
+  """"""
+  dimension: String
+
+  """"""
+  name: String
+
+  """"""
+  type: String
+}
+
+""""""
+type Info {
+  """The length of the response."""
+  count: Int
+
+  """Number of the next page (if it exists)"""
+  next: Int
+
+  """The amount of pages."""
+  pages: Int
+
+  """Number of the previous page (if it exists)"""
+  prev: Int
+}
+
+""""""
+type Location {
+  """Time at which the location was created in the database."""
+  created: String
+
+  """The dimension in which the location is located."""
+  dimension: String
+
+  """The id of the location."""
+  id: ID
+
+  """The name of the location."""
+  name: String
+
+  """List of characters who have been last seen in the location."""
+  residents: [Character]!
+
+  """The type of the location."""
+  type: String
+}
+
+""""""
+type Locations {
+  """"""
+  info: Info
+
+  """"""
+  results: [Location]
+}
+
+type Query {
+  """Get a specific character by ID"""
+  character(id: ID!): Character @join__field(graph: RICKANDMORTY)
+
+  """Get the list of all characters"""
+  characters(filter: FilterCharacter, page: Int): Characters @join__field(graph: RICKANDMORTY)
+
+  """Get a list of characters selected by ids"""
+  charactersByIds(ids: [ID!]!): [Character] @join__field(graph: RICKANDMORTY)
+
+  """Get a specific episode by ID"""
+  episode(id: ID!): Episode @join__field(graph: RICKANDMORTY)
+
+  """Get the list of all episodes"""
+  episodes(filter: FilterEpisode, page: Int): Episodes @join__field(graph: RICKANDMORTY)
+
+  """Get a list of episodes selected by ids"""
+  episodesByIds(ids: [ID!]!): [Episode] @join__field(graph: RICKANDMORTY)
+
+  """Get a specific locations by ID"""
+  location(id: ID!): Location @join__field(graph: RICKANDMORTY)
+
+  """Get the list of all locations"""
+  locations(filter: FilterLocation, page: Int): Locations @join__field(graph: RICKANDMORTY)
+
+  """Get a list of locations selected by ids"""
+  locationsByIds(ids: [ID!]!): [Location] @join__field(graph: RICKANDMORTY)
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+enum core__Purpose {
+  """
+  `EXECUTION` features provide metadata necessary to for operation execution.
+  """
+  EXECUTION
+
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+}
+
+scalar join__FieldSet
+
+enum join__Graph {
+  EXTENSION @join__graph(name: "extension" url: "http://localhost:4001/graphql")
+  RICKANDMORTY @join__graph(name: "rickandmorty" url: "https://rickandmortyapi.com/graphql")
+}

@@ -1,19 +1,14 @@
-import { transformSchemaFederation } from 'graphql-transform-federation';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
-import { buildSchema } from 'graphql';
+import { buildASTSchema } from 'graphql';
 import { readFileSync, writeFileSync } from 'fs';
+import { mergeTypeDefs } from '@graphql-tools/merge';
 
-const inputFileName = 'services/authors/pre-schema.graphql';
-const outputFileName = 'services/authors/schema.graphql';
-const schemaWithoutFederation = buildSchema(readFileSync(inputFileName, "utf8"));
-  
-const federationSchema = transformSchemaFederation(schemaWithoutFederation, {
-    Query: {
-        extend: true,
-    },
-    Author: {
-        keyFields: ['id']
-    },
-});
+const inputFileName = 'services/rickandmorty/real-schema.graphql';
+const inputFederationDefs = 'services/extension/federation-extensions.graphql';
+const outputFileName = 'gateway/federated-rickandmorty.graphql';
+const schemaWithoutFederation = readFileSync(inputFileName, 'utf8');
+const federationDefs = readFileSync(inputFederationDefs, 'utf8');
 
-writeFileSync(outputFileName, printSchemaWithDirectives(federationSchema));
+const merged = buildASTSchema(mergeTypeDefs([schemaWithoutFederation, federationDefs]));
+
+writeFileSync(outputFileName, printSchemaWithDirectives(merged));
