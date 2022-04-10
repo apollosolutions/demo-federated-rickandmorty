@@ -1,4 +1,4 @@
-# Non-Federation Transformation Example
+# demo-federated-rickandmorty
 
 Example of how to transform a non-federation schema SDL and run it against a federation gateway even though it doesn't support it under the hood.
 
@@ -12,10 +12,16 @@ npm i
 
 ## Usage
 
-Then start the servers and gateway with the current schemas. 
+Then start the servers and gateway with the current schemas and setup
 
 ```
 npm start
 ```
 
-To regenerate the files, see the various directories for more info
+The gateway should be running at http://localhost:4000/ where you can send queries to the [Rick and Morty API](https://rickandmortyapi.com/graphql)
+but with an added field to `Character.nickname`.
+
+## Context
+This is a demo of the [@apollosolutions/add-federated-types](https://github.com/apollosolutions/add-federated-types) CLI.
+For more details about that library see the README there. For this demo repo you can see how to regenerate the files for the
+`rickandmorty` service in the [services/rickandmorty](services/rickandmorty) directory.

@@ -2,7 +2,7 @@ subgraphs:
   rickandmorty:
     routing_url: https://rickandmortyapi.com/graphql
     schema:
-      file: ./federated-rickandmorty.graphql
+      file: ../services/rickandmorty/federated-rickandmorty.graphql
   extension:
     routing_url: http://localhost:4001/graphql
     schema:
